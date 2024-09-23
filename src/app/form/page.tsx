@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../../firebase'; 
 import { collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
 
 const AttendanceForm = () => {
   const [name, setName] = useState('');
@@ -12,7 +11,6 @@ const AttendanceForm = () => {
   const [courses, setCourses] = useState<Array<{ id: string; name: string }>>([]);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
 
   // Fetch the available courses from Firebase
   useEffect(() => {

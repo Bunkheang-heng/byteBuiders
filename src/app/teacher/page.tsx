@@ -2,17 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import { auth, db } from '../../firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, DocumentData } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { FaDownload, FaUserGraduate } from 'react-icons/fa';
 import * as XLSX from 'xlsx';
 import Navbar from '../../compounents/nav';
 import Footer from '../../compounents/footer';
 
+interface AttendanceRecord {
+  id: string;
+  name: string;
+  date: { seconds: number };
+  status: string;
+}
+
 const TeacherPage = () => {
   const [courses, setCourses] = useState<Array<string>>([]);
   const [selectedCourse, setSelectedCourse] = useState('');
-  const [attendanceData, setAttendanceData] = useState<Array<any>>([]);
+  const [attendanceData, setAttendanceData] = useState<Array<AttendanceRecord>>([]);
   const [teacherRole, setTeacherRole] = useState('');
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -60,7 +67,7 @@ const TeacherPage = () => {
       const attendanceRef = collection(db, 'attendance');
       const q = query(attendanceRef, where('course', '==', selectedCourse));
       const querySnapshot = await getDocs(q);
-      const attendanceData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const attendanceData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as AttendanceRecord));
       setAttendanceData(attendanceData);
     } catch (error) {
       console.error('Error fetching attendance data:', error);
@@ -71,7 +78,7 @@ const TeacherPage = () => {
     if (selectedCourse) {
       fetchAttendanceData();
     }
-  }, [selectedCourse]);
+  }, [selectedCourse, fetchAttendanceData]);
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(attendanceData);

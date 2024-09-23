@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { auth } from '../../firebase';
 import { toast } from 'react-toastify';
 import { FaEnvelope, FaLock, FaUserCircle } from 'react-icons/fa';
-import Image from 'next/image';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -38,7 +37,7 @@ const Login = () => {
         router.push('/teacher');
         toast.success('Login successful!');
       }
-    } catch (err) {
+    } catch (error) {
       setError('Failed to log in. Please check your credentials.');
       toast.error('Login failed. Please check your credentials.');
     } finally {
@@ -104,7 +103,7 @@ const Login = () => {
           <a href="#" className="text-blue-600 hover:underline">Forgot password?</a>
         </div>
         <div className="mt-8 border-t pt-6">
-          <p className="text-center text-gray-600">Don't have an account? <a href="#" className="text-blue-600 font-semibold hover:underline">Sign up</a></p>
+          <p className="text-center text-gray-600">Don&apos;t have an account? <a href="#" className="text-blue-600 font-semibold hover:underline">Sign up</a></p>
         </div>
       </div>
     </div>

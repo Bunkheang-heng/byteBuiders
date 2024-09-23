@@ -2,17 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import { auth } from '../../firebase';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { FaUser, FaEnvelope, FaGraduationCap, FaUserTag, FaSignOutAlt } from 'react-icons/fa';
 
+interface UserProfile {
+  name: string;
+  email: string;
+  role: string;
+  course: string;
+}
+
 const ProfilePage = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (authUser: User | null) => {
       if (authUser) {
         setUser({
           name: authUser.displayName || 'N/A',
@@ -47,9 +54,9 @@ const ProfilePage = () => {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-xl">
           <h1 className="text-2xl font-bold text-red-600 mb-4">User Not Found</h1>
-          <p className="text-gray-600 mb-4">We couldn't find your user profile. This could be because:</p>
+          <p className="text-gray-600 mb-4">We couldn&apos;t find your user profile. This could be because:</p>
           <ul className="list-disc list-inside text-gray-600 mb-4">
-            <li>Your account hasn't been fully set up</li>
+            <li>Your account hasn&apos;t been fully set up</li>
             <li>There was an error retrieving your data</li>
             <li>Your account may have been deleted</li>
           </ul>
